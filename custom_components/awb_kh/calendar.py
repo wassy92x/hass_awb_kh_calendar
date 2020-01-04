@@ -9,6 +9,7 @@ from homeassistant.components.calendar import (
     PLATFORM_SCHEMA,
     CalendarEventDevice,
     get_date,
+    is_offset_reached
 )
 from homeassistant.const import (
     CONF_NAME,
@@ -27,7 +28,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_CITY): cv.string,
         vol.Required(CONF_STREET): cv.string,
-        vol.Optional(CONF_OFFSET, default=‭86400‬): cv.integer,
+        vol.Optional(CONF_OFFSET, default="24:00:00"): cv.time_period_str,
     }
 )
 
@@ -37,16 +38,15 @@ MIN_TIME_BETWEEN_UPDATES = timedelta(hours=24)
 def setup_platform(hass, config, add_entities, disc_info=None):
     """Set up the AWB KH Calendar platform."""
     data = AWBCalendarData(config[CONF_CITY], config[CONF_STREET])
-    offset = timedelta(minutes=config[CONF_OFFSET])
     black_entity_id = generate_entity_id(ENTITY_ID_FORMAT, "black_waste", hass=hass)
     brown_entity_id = generate_entity_id(ENTITY_ID_FORMAT, "brown_waste", hass=hass)
     yellow_entity_id = generate_entity_id(ENTITY_ID_FORMAT, "yellow_waste", hass=hass)
     blue_entity_id = generate_entity_id(ENTITY_ID_FORMAT, "blue_waste", hass=hass)
     trash_devices = []
-    trash_devices.append(TrashDevice("Restmüll", black_entity_id, data, "black", offset))
-    trash_devices.append(TrashDevice("Biomüll", brown_entity_id, data, "brown", offset))
-    trash_devices.append(TrashDevice("Kunstoffmüll", yellow_entity_id, data, "yellow", offset))
-    trash_devices.append(TrashDevice("Papiermüll", blue_entity_id, data, "blue", offset))
+    trash_devices.append(TrashDevice("Restmüll", black_entity_id, data, "black", config[CONF_OFFSET]))
+    trash_devices.append(TrashDevice("Biomüll", brown_entity_id, data, "brown", config[CONF_OFFSET]))
+    trash_devices.append(TrashDevice("Kunstoffmüll", yellow_entity_id, data, "yellow", config[CONF_OFFSET]))
+    trash_devices.append(TrashDevice("Papiermüll", blue_entity_id, data, "blue", config[CONF_OFFSET]))
     add_entities(trash_devices, True)
 
 
@@ -102,10 +102,9 @@ class TrashDevice(CalendarEventDevice):
                     "summary": self.name,
                     "start": self.get_hass_date(event["date"]),
                     "end": self.get_hass_date(event["date"] + timedelta(days=1)),
-                    "offset_time": self._offset
+                    "offset_time": self._offset,
                     "location": "",
                     "description": "",
-                    
                 }
                 self._offset_reached = is_offset_reached(self._event)
                 return
