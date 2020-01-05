@@ -1,1 +1,1 @@
-"""The AWB KH Calendar component."""
+"""The AWB KH Sensor component."""
