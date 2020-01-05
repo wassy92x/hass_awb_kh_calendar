@@ -28,7 +28,8 @@ PLATFORM_SCHEMA = cv.PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_OFFSET, default="12:00:00"): cv.time_period_str,
     }
 )
-
+DOMAIN = "sensor"
+ENTITY_ID_FORMAT = DOMAIN + ".{}"
 MIN_TIME_BETWEEN_UPDATES = timedelta(hours=24)
 
 
@@ -76,7 +77,7 @@ class WasteSensor(Entity):
         return self._state
 
     @property
-    dev device_class(self):
+    def device_class(self):
         """Return the device class"""
         return "ISO8601"
 
