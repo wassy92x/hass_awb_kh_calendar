@@ -28,8 +28,7 @@ PLATFORM_SCHEMA = cv.PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_OFFSET, default="12:00:00"): cv.time_period_str,
     }
 )
-DOMAIN = "sensor"
-ENTITY_ID_FORMAT = DOMAIN + ".{}"
+ENTITY_ID_FORMAT = "sensor.{}"
 MIN_TIME_BETWEEN_UPDATES = timedelta(hours=24)
 
 
