@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import logging
 import requests
+import pytz
 
 from homeassistant.const import (
     CONF_NAME,
@@ -115,7 +116,7 @@ class AWBCalendarData:
         body = response.json()
         events = map(lambda k: {
             "id": k["id"],
-            "date": datetime.strptime(k["termin"], "%Y-%m-%d").date(),
+            "date": datetime.strptime(k["termin"], "%Y-%m-%d").replace(tzinfo=pytz.timezone('Europe/Berlin')),
             "black": k["restmuell"] != "0",
             "brown": k["bio"] != "0",
             "yellow": k["wert"] != "0",
