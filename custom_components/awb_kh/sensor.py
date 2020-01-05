@@ -93,7 +93,7 @@ class WasteSensor(Entity):
         current_date = current_date_time.date()
         self._state = STATE_OFF
         for event in self.data.events:
-            if event[self._trash_type] is True and event["date"] >= current_date:
+            if event[self._trash_type] is True and event["date"].date() >= current_date:
                 self._next_date = event["date"]
                 if current_date_time >= (event["date"] - self._offset) and current_date_time <= (event["date"] + timedelta(days=1)):
                     self._state = STATE_ON
