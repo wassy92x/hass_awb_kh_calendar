@@ -89,7 +89,7 @@ class WasteSensor(Entity):
     def update(self):
         """Update event data."""
         self.data.update()
-        current_date_time = datetime.now()
+        current_date_time = datetime.now(tz=pytz.timezone('Europe/Berlin'))
         current_date = current_date_time.date()
         self._state = STATE_OFF
         for event in self.data.events:
