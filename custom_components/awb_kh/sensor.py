@@ -84,6 +84,7 @@ class WasteSensor(Entity):
         """Update event data."""
         self.data.update()
         current_date = datetime.now().date()
+        self._next_date = None;
         for event in self.data.events:
             if event[self._trash_type] is True and event["date"] >= current_date:
                 self._next_date = event["date"]
