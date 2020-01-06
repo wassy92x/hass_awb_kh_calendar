@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 import logging
 import requests
-import pytz
 
 from homeassistant.const import (
     CONF_NAME,
@@ -12,7 +11,7 @@ from homeassistant.helpers.entity import (
     generate_entity_id,
     Entity,
 )
-from homeassistant.util import Throttle, dt
+from homeassistant.util import Throttle
 
 _LOGGER = logging.getLogger(__name__)
 
