@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import pytz
 import logging
 import requests
 
@@ -104,9 +105,10 @@ class AWBCalendarData:
         d = {"ort": self._city, "strasse": self._street, "mode": "false"}
         response = requests.post(" https://app.awb-bad-kreuznach.de/api/loadDates.php", data=d)
         body = response.json()
+        timezone = pytz.timezone("Europe/Berlin")
         events = map(lambda k: {
             "id": k["id"],
-            "date": datetime.strptime(k["termin"], "%Y-%m-%d").date(),
+            "date": timezone.localize(datetime.strptime(k["termin"], "%Y-%m-%d")).date(),
             "black": k["restmuell"] != "0",
             "brown": k["bio"] != "0",
             "yellow": k["wert"] != "0",
