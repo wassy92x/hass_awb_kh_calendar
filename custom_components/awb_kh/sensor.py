@@ -108,7 +108,7 @@ class AWBCalendarData:
         timezone = pytz.timezone("Europe/Berlin")
         events = map(lambda k: {
             "id": k["id"],
-            "date": timezone.localize(datetime.strptime(k["termin"], "%Y-%m-%d")).date(),
+            "date": timezone.localize(datetime.strptime(k["termin"], "%Y-%m-%d").date()),
             "black": k["restmuell"] != "0",
             "brown": k["bio"] != "0",
             "yellow": k["wert"] != "0",
