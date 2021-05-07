@@ -101,8 +101,8 @@ class AWBCalendarData:
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):
         """Get the latest data."""
-        d = {"ort": self._city, "strasse": self._street}
-        response = requests.post("https://app.awb-bad-kreuznach.de/index.php?option=com_iab_start&controller=iab_start&task=loadTermine", data=d)
+        d = {"ort": self._city, "strasse": self._street, "mode": "false"}
+        response = requests.post(" https://app.awb-bad-kreuznach.de/api/loadDates.php", data=d)
         body = response.json()
         events = map(lambda k: {
             "id": k["id"],
@@ -111,5 +111,5 @@ class AWBCalendarData:
             "brown": k["bio"] != "0",
             "yellow": k["wert"] != "0",
             "blue": k["papier"] != "0",
-        }, body["termine"])
+        }, body)
         self.events = sorted(events, key=lambda k: k["date"])
