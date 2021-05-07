@@ -86,7 +86,7 @@ class WasteSensor(Entity):
         current_date = datetime.now().date()
         self._next_date = None;
         for event in self.data.events:
-            if event[self._trash_type] is True and event["date"] >= current_date:
+            if event[self._trash_type] is True and event["date"].date() >= current_date:
                 self._next_date = event["date"]
                 return
 
@@ -108,7 +108,7 @@ class AWBCalendarData:
         timezone = pytz.timezone("Europe/Berlin")
         events = map(lambda k: {
             "id": k["id"],
-            "date": timezone.localize(datetime.strptime(k["termin"], "%Y-%m-%d").date()),
+            "date": timezone.localize(datetime.strptime(k["termin"], "%Y-%m-%d")),
             "black": k["restmuell"] != "0",
             "brown": k["bio"] != "0",
             "yellow": k["wert"] != "0",
